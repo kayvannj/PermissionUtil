@@ -1,4 +1,4 @@
-package com.kayvan.tools.permissionutil;
+package com.github.kayvannj.util.permission;
 
 /**
  * Created by kayvan on 10/27/15.

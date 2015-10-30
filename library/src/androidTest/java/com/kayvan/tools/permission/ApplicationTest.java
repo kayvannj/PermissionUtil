@@ -1,4 +1,4 @@
-package com.kayvan.tools.permissionutil;
+package com.kayvan.tools.permission;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

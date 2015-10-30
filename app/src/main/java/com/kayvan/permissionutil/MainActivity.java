@@ -1,9 +1,7 @@
 package com.kayvan.permissionutil;
 
-import com.kayvan.tools.permissionutil.Func;
-import com.kayvan.tools.permissionutil.PermissionRequestObject;
-import com.kayvan.tools.permissionutil.PermissionUtil;
-import com.kayvan.tools.permissionutil.SinglePermission;
+import com.github.kayvannj.util.permission.Func;
+import com.github.kayvannj.util.permission.PermissionUtil;
 
 import android.Manifest;
 import android.os.Bundle;
@@ -19,8 +17,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_CONTACTS = 1;
     private static final int REQUEST_CODE_STORAGE = 2;
     @Bind(R.id.status) TextView mStatus;
-    private PermissionRequestObject mStoragePermissionRequest;
-    private PermissionRequestObject mContactsPermissionRequest;
+    private PermissionUtil.PermissionRequestObject mStoragePermissionRequest;
+    private PermissionUtil.PermissionRequestObject mContactsPermissionRequest;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,18 +28,19 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.storage) public void onAskForStoragePermissionClick() {
         mStoragePermissionRequest = PermissionUtil.with(this).request(
-                new SinglePermission(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE, "For some reason that don't wanna discuss")).onGrant(
+                REQUEST_CODE_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_CONTACTS);
+        mStoragePermissionRequest.onAllGranted(
                 new Func() {
                     @Override protected void call() {
                         doOnPermissionGranted();
                     }
-                }).onDeny(
+                }).onAllDenied(
                 new Func() {
                     @Override protected void call() {
                         doOnPermissionDenied();
                     }
-                }).ask(REQUEST_CODE_STORAGE);
+                });
+
     }
 
     private void doOnPermissionDenied() {
@@ -55,19 +54,19 @@ public class MainActivity extends AppCompatActivity {
     private void updateStatus(String s) {mStatus.setText(String.format("> %s\n", s) + mStatus.getText().toString());}
 
     @OnClick(R.id.contacts) public void onAskForContactsPermissionClick() {
-        mContactsPermissionRequest = PermissionUtil.with(this).request(
-                new SinglePermission(
-                        Manifest.permission.WRITE_CONTACTS, "For some reason other reason")).onGrant(
-                new Func() {
-                    @Override protected void call() {
-                        doOnPermissionGranted();
-                    }
-                }).onDeny(
-                new Func() {
-                    @Override protected void call() {
-                        doOnPermissionDenied();
-                    }
-                }).ask(REQUEST_CODE_CONTACTS);
+//        mContactsPermissionRequest = PermissionUtil.with(this).request(
+//                new SinglePermission(
+//                        Manifest.permission.WRITE_CONTACTS, "For some reason other reason")).onAllGranted(
+//                new Func() {
+//                    @Override protected void call(String permissionName) {
+//                        doOnPermissionGranted();
+//                    }
+//                }).onAllDenied(
+//                new Func() {
+//                    @Override protected void call(String permissionName) {
+//                        doOnPermissionDenied();
+//                    }
+//                }).ask(REQUEST_CODE_CONTACTS);
     }
 
     @Override public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
