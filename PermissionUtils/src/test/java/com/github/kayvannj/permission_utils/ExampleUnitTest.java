@@ -1,4 +1,4 @@
-package com.kayvan.tools.permissionutil;
+package com.github.kayvannj.permission_utils;
 
 import org.junit.Test;
 
