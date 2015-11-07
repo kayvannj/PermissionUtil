@@ -1,4 +1,5 @@
 # PermissionUtil
+[![Join the chat at https://gitter.im/kayvannj/PermissionUtil](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kayvannj/PermissionUtil?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ###What is this?
 A simple wrapper around Android 6.0 runtime permission api
 ###Why?
