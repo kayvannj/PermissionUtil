@@ -7,33 +7,30 @@ Adding runtime permissions is not hard but having to seperate your code and move
 ###How?
 Anywhere in your ```AppCompatActivity``` that you want to ask for user's permisssion
 ```java
-mRequestObject = PermissionUtil.with(this)
-                                .request(Manifest.permission.READ_CONTACTS)
-                                .onGrant(
-                                    new Func() {
-                                        @Override protected void call() {
-                                            //Happy Path
-                                        }
-                                    })
-                                .onDeny(
-                                    new Func() {
-                                        @Override protected void call() {
-                                            //Sad Path
-                                        }
-                                    })
-                                .ask(REQUEST_CODE);
+mRequestObject = PermissionUtil.with(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE).onAllGranted(
+                new Func() {
+                    @Override protected void call() {
+                        //Happy Path
+                    }
+                }).onAllDenied(
+                new Func() {
+                    @Override protected void call() {
+                        //Sad Path
+                    }
+                }).ask(REQUEST_CODE_STORAGE);
 ```
 And add this to ```onRequestPermissionsResult```
 ```java
 mRequestObject.onRequestPermissionsResult(requestCode, permissions, grantResults);
 ```
+
 ###Dependency?
 ```groovy
 compile 'com.android.support:appcompat-v7:23.1.0'
 ```
 ###Download
 ```groovy
-compile 'com.github.kayvannj.util.permission:library:1.0.0@aar'
+compile 'com.github.kayvannj:PermissionUtils:1.0.1@aar'
 ```
 
 
