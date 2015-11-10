@@ -51,4 +51,3 @@ artifacts {
 task findConventions << {
     println project.getConvention()
 }
-}
