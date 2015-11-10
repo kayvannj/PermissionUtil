@@ -14,7 +14,7 @@ mRequestObject = PermissionUtil.with(this).request(Manifest.permission.WRITE_EXT
                     @Override protected void call() {
                         //Happy Path
                     }
-                }).onAllDenied(
+                }).onAnyDenied(
                 new Func() {
                     @Override protected void call() {
                         //Sad Path
@@ -32,7 +32,7 @@ compile 'com.android.support:appcompat-v7:23.1.0'
 ```
 ###Download
 ```groovy
-compile 'com.github.kayvannj:PermissionUtils:1.0.1@aar'
+compile 'com.github.kayvannj:PermissionUtils:1.0.2@aar'
 ```
 
 
