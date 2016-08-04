@@ -25,6 +25,10 @@ And add this to ```onRequestPermissionsResult```
 ```java
 mRequestObject.onRequestPermissionsResult(requestCode, permissions, grantResults);
 ```
+Add the requested permission to your ```AndroidManifest.xml``` as well
+```xml
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+```
 
 ###Dependency?
 ```groovy
