@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.github.kayvannj'
@@ -7,11 +6,11 @@ version = '1.0.3'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         minSdkVersion 8
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
     }
@@ -27,54 +26,4 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.0'
-}
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
-task findConventions << {
-    println project.getConvention()
-}
-
-Properties props = new Properties()
-File propsFile = file('kayvanlibs.properties')
-props.load(propsFile.newDataInputStream())
-
-def siteUrl = 'https://github.com/kayvannj/PermissionUtil'
-def gitUrl = 'https://github.com/kayvannj/PermissionUtil.git'
-def bintray_user = 'kayvannj'
-def bintray_api_key= props.get("bintray_api_key")
-
-bintray {
-    user = bintray_user
-    key = bintray_api_key
-
-    configurations = ['archives'] //When uploading configuration files
-    pkg {
-        repo = 'maven'
-        name = group
-        desc = 'Android 6.0 permissions made simple'
-        websiteUrl = siteUrl
-        issueTrackerUrl = 'https://github.com/kayvannj/PermissionUtil/issues'
-        vcsUrl = gitUrl
-        licenses = ['Apache-2.0']
-        labels = ['aar', 'android']
-        publicDownloadNumbers = true
-    }
 }
