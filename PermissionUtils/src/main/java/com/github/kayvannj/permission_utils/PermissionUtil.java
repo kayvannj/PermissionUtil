@@ -2,6 +2,7 @@ package com.github.kayvannj.permission_utils;
 
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,45 +26,78 @@ import java.util.ArrayList;
  */
 public class PermissionUtil {
 
-    static private AppCompatActivity mAppCompatActivity;
-
     public static PermissionObject with(AppCompatActivity activity) {
-        mAppCompatActivity = activity;
-        return new PermissionObject();
+        return new PermissionObject(activity);
+    }
+
+    public static PermissionObject with(Fragment fragment) {
+        return new PermissionObject(fragment);
     }
 
     public static class PermissionObject {
 
+        private AppCompatActivity mActivity;
+        private Fragment mFragment;
+
+        PermissionObject(AppCompatActivity activity) {
+            mActivity = activity;
+        }
+
+        PermissionObject(Fragment fragment) {
+            mFragment = fragment;
+        }
+
+        public boolean has(String permissionName) {
+            int permissionCheck;
+            if (mActivity != null) {
+                permissionCheck = ContextCompat.checkSelfPermission(mActivity, permissionName);
+            } else {
+                permissionCheck = ContextCompat.checkSelfPermission(mFragment.getContext(), permissionName);
+            }
+
+            return permissionCheck == PackageManager.PERMISSION_GRANTED;
+        }
+
         public PermissionRequestObject request(String permissionName) {
-            return new PermissionRequestObject(new String[]{permissionName});
+            if (mActivity != null) {
+                return new PermissionRequestObject(mActivity, new String[]{permissionName});
+            } else {
+                return new PermissionRequestObject(mFragment, new String[]{permissionName});
+            }
         }
 
         public PermissionRequestObject request(String... permissionNames) {
-            return new PermissionRequestObject(permissionNames);
+            return new PermissionRequestObject(mActivity, permissionNames);
         }
     }
 
     static public class PermissionRequestObject {
 
         private static final String TAG = PermissionObject.class.getSimpleName();
-
-        private ArrayList<SinglePermission> mPermissionsWeDontHave;
-        private int mRequestCode;
-        private Func mGrantFunc;
+        private AppCompatActivity mActivity;
         private Func mDenyFunc;
-        private Func2 mResultFunc;
-        private Func3 mRationalFunc;
+        private Fragment mFragment;
+        private Func mGrantFunc;
         private String[] mPermissionNames;
+        private ArrayList<SinglePermission> mPermissionsWeDontHave;
+        private Func3 mRationalFunc;
+        private int mRequestCode;
+        private Func2 mResultFunc;
 
-        public PermissionRequestObject(String[] permissionNames) {
+        public PermissionRequestObject(AppCompatActivity activity, String[] permissionNames) {
+            mActivity = activity;
+            mPermissionNames = permissionNames;
+        }
+
+        public PermissionRequestObject(Fragment fragment, String[] permissionNames) {
+            mFragment = fragment;
             mPermissionNames = permissionNames;
         }
 
         /**
          * Execute the permission request with the given Request Code
          *
-         * @param reqCode
-         *         a unique request code in your activity
+         * @param reqCode a unique request code in your activity
          */
         public PermissionRequestObject ask(int reqCode) {
             mRequestCode = reqCode;
@@ -75,10 +109,16 @@ public class PermissionUtil {
 
             if (needToAsk()) {
                 Log.i(TAG, "Asking for permission");
-                ActivityCompat.requestPermissions(mAppCompatActivity, mPermissionNames, reqCode);
+                if (mActivity != null) {
+                    ActivityCompat.requestPermissions(mActivity, mPermissionNames, reqCode);
+                } else {
+                    mFragment.requestPermissions(mPermissionNames, reqCode);
+                }
             } else {
                 Log.i(TAG, "No need to ask for permission");
-                if (mGrantFunc != null) mGrantFunc.call();
+                if (mGrantFunc != null) {
+                    mGrantFunc.call();
+                }
             }
             return this;
         }
@@ -87,11 +127,23 @@ public class PermissionUtil {
             ArrayList<SinglePermission> neededPermissions = new ArrayList<>(mPermissionsWeDontHave);
             for (int i = 0; i < mPermissionsWeDontHave.size(); i++) {
                 SinglePermission perm = mPermissionsWeDontHave.get(i);
-                int checkRes = ContextCompat.checkSelfPermission(mAppCompatActivity, perm.getPermissionName());
+                int checkRes;
+                if (mActivity != null) {
+                    checkRes = ContextCompat.checkSelfPermission(mActivity, perm.getPermissionName());
+                } else {
+                    checkRes = ContextCompat.checkSelfPermission(mFragment.getContext(), perm.getPermissionName());
+                }
                 if (checkRes == PackageManager.PERMISSION_GRANTED) {
                     neededPermissions.remove(perm);
                 } else {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(mAppCompatActivity, perm.getPermissionName())) {
+                    boolean shouldShowRequestPermissionRationale;
+                    if (mActivity != null) {
+                        shouldShowRequestPermissionRationale =
+                                ActivityCompat.shouldShowRequestPermissionRationale(mActivity, perm.getPermissionName());
+                    } else {
+                        shouldShowRequestPermissionRationale = mFragment.shouldShowRequestPermissionRationale(perm.getPermissionName());
+                    }
+                    if (shouldShowRequestPermissionRationale) {
                         perm.setRationalNeeded(true);
                     }
                 }
@@ -151,9 +203,8 @@ public class PermissionUtil {
          * </pre>
          */
         public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-            Log.i(TAG, String.format("ReqCode: %d, ResCode: %d, PermissionName: %s", requestCode, grantResults[0], permissions[0]));
-
             if (mRequestCode == requestCode) {
+                Log.i(TAG, String.format("ReqCode: %d, ResCode: %d, PermissionName: %s", requestCode, grantResults[0], permissions[0]));
                 if (mResultFunc != null) {
                     Log.i(TAG, "Calling Results Func");
                     mResultFunc.call(requestCode, permissions, grantResults);
@@ -162,16 +213,15 @@ public class PermissionUtil {
 
                 for (int i = 0; i < permissions.length; i++) {
                     if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                        if (mPermissionsWeDontHave.get(i).isRationalNeeded()) {
-                            if (mRationalFunc != null) {
-                                Log.i(TAG, "Calling Rational Func");
-                                mRationalFunc.call(mPermissionsWeDontHave.get(i).getPermissionName());
-                            }
-                        }
-                        if (mDenyFunc != null) {
+                        if (mPermissionsWeDontHave.get(i).isRationalNeeded() && mRationalFunc != null) {
+                            Log.i(TAG, "Calling Rational Func");
+                            mRationalFunc.call(mPermissionsWeDontHave.get(i).getPermissionName());
+                        } else if (mDenyFunc != null) {
                             Log.i(TAG, "Calling Deny Func");
                             mDenyFunc.call();
-                        } else Log.e(TAG, "NUll DENY FUNCTIONS");
+                        } else {
+                            Log.e(TAG, "NUll DENY FUNCTIONS");
+                        }
 
                         // terminate if there is at least one deny
                         return;
@@ -182,7 +232,9 @@ public class PermissionUtil {
                 if (mGrantFunc != null) {
                     Log.i(TAG, "Calling Grant Func");
                     mGrantFunc.call();
-                } else Log.e(TAG, "NUll GRANT FUNCTIONS");
+                } else {
+                    Log.e(TAG, "NUll GRANT FUNCTIONS");
+                }
             }
         }
     }

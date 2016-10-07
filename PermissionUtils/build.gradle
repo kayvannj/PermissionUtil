@@ -2,8 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
-group = 'com.github.kayvannj' // Change this to match your package name
-version = '1.0.1' // Change this to match your version number
+group = 'com.github.kayvannj'
+version = '1.0.3'
 
 android {
     compileSdkVersion 23
@@ -50,4 +50,31 @@ artifacts {
 
 task findConventions << {
     println project.getConvention()
+}
+
+Properties props = new Properties()
+File propsFile = file('kayvanlibs.properties')
+props.load(propsFile.newDataInputStream())
+
+def siteUrl = 'https://github.com/kayvannj/PermissionUtil'
+def gitUrl = 'https://github.com/kayvannj/PermissionUtil.git'
+def bintray_user = 'kayvannj'
+def bintray_api_key= props.get("bintray_api_key")
+
+bintray {
+    user = bintray_user
+    key = bintray_api_key
+
+    configurations = ['archives'] //When uploading configuration files
+    pkg {
+        repo = 'maven'
+        name = group
+        desc = 'Android 6.0 permissions made simple'
+        websiteUrl = siteUrl
+        issueTrackerUrl = 'https://github.com/kayvannj/PermissionUtil/issues'
+        vcsUrl = gitUrl
+        licenses = ['Apache-2.0']
+        labels = ['aar', 'android']
+        publicDownloadNumbers = true
+    }
 }
