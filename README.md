@@ -7,7 +7,7 @@ A simple wrapper around Android 6.0 runtime permission api
 Adding runtime permissions is not hard but having to seperate your code and move the methods around to capture callbacks is a little pain. This library provides a chained api to do all you need to do for supporting runtime permissions.
 
 ###How?
-Anywhere in your ```AppCompatActivity``` that you want to ask for user's permisssion
+Anywhere in your ```AppCompatActivity``` or ```Fragment``` that you want to ask for user's permisssion
 ```java
 mRequestObject = PermissionUtil.with(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE).onAllGranted(
                 new Func() {
@@ -19,16 +19,20 @@ mRequestObject = PermissionUtil.with(this).request(Manifest.permission.WRITE_EXT
                     @Override protected void call() {
                         //Sad Path
                     }
-                }).ask(REQUEST_CODE_STORAGE);
+                }).ask(REQUEST_CODE_STORAGE); // REQUEST_CODE_STORAGE is what ever int you want (should be distinct)
 ```
-And add this to ```onRequestPermissionsResult```
+And add this to ```onRequestPermissionsResult()```
 ```java
 mRequestObject.onRequestPermissionsResult(requestCode, permissions, grantResults);
 ```
+^ NOTE: make sure to check for `null`
+
 Add the requested permission to your ```AndroidManifest.xml``` as well
 ```xml
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 ```
+
+Done.
 
 ###Dependency?
 ```groovy
@@ -36,7 +40,7 @@ compile 'com.android.support:appcompat-v7:23.1.0'
 ```
 ###Download
 ```groovy
-compile 'com.github.kayvannj:PermissionUtils:1.0.2@aar'
+compile 'com.github.kayvannj:PermissionUtils:1.0.3'
 ```
 
 
