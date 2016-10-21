@@ -11,8 +11,8 @@ android {
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.0.3"
     }
     buildTypes {
         release {
@@ -68,13 +68,13 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = 'maven'
-        name = 'PermissionUtils'
+        name = 'PermissionUtil'
         userOrg = user
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/kayvannj/PermissionUtil.git'
         version {
             name = '1.0.3'
-            desc = 'Final 1.0.3'
+            desc = 'A simple wrapper around Android 6.0 runtime permission api'
             vcsTag = '1.0.3'
         }
     }
