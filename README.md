@@ -1,6 +1,5 @@
 # PermissionUtil
-[![Join the chat at https://gitter.im/kayvannj/PermissionUtil](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kayvannj/PermissionUtil?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-PermissionUtil-green.svg?style=true)](https://android-arsenal.com/details/1/2750)
+[ ![Download](https://api.bintray.com/packages/kayvannj/maven/PermissionUtil/images/download.svg) ](https://bintray.com/kayvannj/maven/PermissionUtil/_latestVersion)
 ###What is this?
 A simple wrapper around Android 6.0 runtime permission api
 ###Why?
