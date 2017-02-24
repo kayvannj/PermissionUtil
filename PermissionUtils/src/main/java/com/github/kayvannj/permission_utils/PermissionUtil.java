@@ -67,7 +67,11 @@ public class PermissionUtil {
         }
 
         public PermissionRequestObject request(String... permissionNames) {
-            return new PermissionRequestObject(mActivity, permissionNames);
+            if (mActivity != null) {
+                return new PermissionRequestObject(mActivity, permissionNames);
+            } else {
+                return new PermissionRequestObject(mFragment, permissionNames);
+            }
         }
     }
 
