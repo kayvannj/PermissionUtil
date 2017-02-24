@@ -8,3 +8,5 @@
 /captures
 /.idea
 kayvanlibs.properties
+gradle.properties
+release.gradle
