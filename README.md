@@ -1,6 +1,8 @@
 # PermissionUtil
 [ ![Download](https://api.bintray.com/packages/kayvannj/maven/PermissionUtil/images/download.svg) ](https://bintray.com/kayvannj/maven/PermissionUtil/_latestVersion)
 ###What is this?
+
+[![Join the chat at https://gitter.im/kayvannj/PermissionUtil](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kayvannj/PermissionUtil?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 A simple wrapper around Android 6.0 runtime permission api
 ###Why?
 Adding runtime permissions is not hard but having to seperate your code and move the methods around to capture callbacks is a little pain. This library provides a chained api to do all you need to do for supporting runtime permissions.
