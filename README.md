@@ -1,11 +1,11 @@
 # PermissionUtil
 [ ![Download](https://api.bintray.com/packages/kayvannj/maven/PermissionUtil/images/download.svg) ](https://bintray.com/kayvannj/maven/PermissionUtil/_latestVersion)
-###What is this?
+### What is this?
 A simple wrapper around Android 6.0 runtime permission api
-###Why?
+### Why?
 Adding runtime permissions is not hard but having to seperate your code and move the methods around to capture callbacks is a little pain. This library provides a chained api to do all you need to do for supporting runtime permissions.
 
-###How?
+### How?
 Anywhere in your ```AppCompatActivity``` or ```Fragment``` that you want to ask for user's permisssion
 ```java
 mRequestObject = PermissionUtil.with(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE).onAllGranted(
@@ -33,11 +33,11 @@ Add the requested permission to your ```AndroidManifest.xml``` as well
 
 Done.
 
-###Dependency?
+### Dependency?
 ```groovy
 compile 'com.android.support:appcompat-v7:23.1.0'
 ```
-###Download
+### Download
 ```groovy
 compile 'com.github.kayvannj:PermissionUtils:1.0.3'
 ```
