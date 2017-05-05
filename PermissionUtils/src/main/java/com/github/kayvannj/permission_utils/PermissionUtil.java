@@ -208,7 +208,6 @@ public class PermissionUtil {
          */
         public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
             if (mRequestCode == requestCode) {
-                Log.i(TAG, String.format("ReqCode: %d, ResCode: %d, PermissionName: %s", requestCode, grantResults[0], permissions[0]));
                 if (mResultFunc != null) {
                     Log.i(TAG, "Calling Results Func");
                     mResultFunc.call(requestCode, permissions, grantResults);

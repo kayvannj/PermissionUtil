@@ -1,18 +1,15 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-
 group = 'com.github.kayvannj'
-version = '1.0.3'
-
+version = '1.0.6'
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
-        minSdkVersion 8
-        targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion 9
+        targetSdkVersion 25
+        versionCode 6
+        versionName "1.0.6"
     }
     buildTypes {
         release {
@@ -25,5 +22,33 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+}
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+    pkg {
+        repo = 'maven'
+        name = 'PermissionUtil'
+        userOrg = user
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/kayvannj/PermissionUtil.git'
+        version {
+            name = '1.0.6'
+            desc = 'A simple wrapper around Android 6.0 runtime permission api'
+            vcsTag = '1.0.6'
+        }
+    }
+    publications = ['MyPublication']
+}
+
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            groupId 'com.github.kayvannj'
+            artifactId 'PermissionUtils'
+            version "1.0.6"
+        }
+    }
 }
