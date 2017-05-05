@@ -1,15 +1,13 @@
 apply plugin: 'com.android.library'
-group = 'com.github.kayvannj'
-version = '1.0.6'
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
 
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 25
-        versionCode 6
-        versionName "1.0.6"
+        versionCode 9
+        versionName "1.0.9"
     }
     buildTypes {
         release {
@@ -18,37 +16,41 @@ android {
         }
     }
 }
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.3.1'
 }
 
-bintray {
-    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-    pkg {
-        repo = 'maven'
-        name = 'PermissionUtil'
-        userOrg = user
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/kayvannj/PermissionUtil.git'
-        version {
-            name = '1.0.6'
-            desc = 'A simple wrapper around Android 6.0 runtime permission api'
-            vcsTag = '1.0.6'
-        }
-    }
-    publications = ['MyPublication']
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'PermissionUtil'
+
+    publishedGroupId = 'com.github.kayvannj'
+    libraryName = 'PermissionUtils'
+    artifact = 'PermissionUtils'
+
+    libraryDescription = 'A simple wrapper around Android 6.0 runtime permission api'
+
+    siteUrl = 'https://github.com/kayvannj/PermissionUtil'
+    gitUrl = 'https://github.com/kayvannj/PermissionUtil.git'
+
+    libraryVersion = '1.0.9'
+
+    developerId = 'kayvannj'
+    developerName = 'Kayvan Najafzadeh'
+    developerEmail = 'kayvan.najafzadeh@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
 }
 
-publishing {
-    publications {
-        MyPublication(MavenPublication) {
-            groupId 'com.github.kayvannj'
-            artifactId 'PermissionUtils'
-            version "1.0.6"
-        }
-    }
-}
+// Place it at the end of the file
+apply from: 'https://raw.githubusercontent.com/kayvannj/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/kayvannj/JCenter/master/bintrayv1.gradle'
