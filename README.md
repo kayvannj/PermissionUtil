@@ -39,7 +39,7 @@ compile 'com.android.support:appcompat-v7:25.3.1'
 ```
 ### Download
 ```groovy
-compile 'com.github.kayvannj:PermissionUtils:1.0.6'
+compile 'com.github.kayvannj:PermissionUtils:1.0.9'
 ```
 
 
