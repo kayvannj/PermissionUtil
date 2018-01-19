@@ -1,11 +1,14 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.2'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 9
         versionName "1.0.9"
     }
@@ -24,7 +27,8 @@ tasks.withType(Javadoc) {
 
 dependencies {
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:27.0.2'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 ext {
@@ -54,3 +58,6 @@ ext {
 // Place it at the end of the file
 apply from: 'https://raw.githubusercontent.com/kayvannj/JCenter/master/installv1.gradle'
 apply from: 'https://raw.githubusercontent.com/kayvannj/JCenter/master/bintrayv1.gradle'
+repositories {
+    mavenCentral()
+}
