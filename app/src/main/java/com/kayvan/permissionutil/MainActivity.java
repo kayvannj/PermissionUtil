@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_CONTACTS = 1;
     private static final int REQUEST_CODE_STORAGE = 2;
     private static final int REQUEST_CODE_BOTH = 3;
-    @Bind(R.id.status) TextView mStatus;
+    @BindView(R.id.status) TextView mStatus;
     private PermissionUtil.PermissionRequestObject mBothPermissionRequest;
     private PermissionUtil.PermissionRequestObject mContactsPermissionRequest;
     private PermissionUtil.PermissionRequestObject mStoragePermissionRequest;
